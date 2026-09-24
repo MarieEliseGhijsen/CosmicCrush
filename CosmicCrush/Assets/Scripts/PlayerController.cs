@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 0;
-    public TextMeshProUGUI massText;
+    public GameObject massTextObject;
     public GameObject winTextObject;
 
     private Rigidbody rb;
@@ -32,9 +33,9 @@ public class PlayerController : MonoBehaviour
 
     void SetMassText()
     {
-        massText.text = "Mass : " + mass.ToString();
+        massTextObject.GetComponent<TextMeshProUGUI>().text = "Mass : " + mass.ToString();
 
-        if(mass >= 12)
+        if(mass >= 500)
         {
             winTextObject.SetActive(true);
 
@@ -55,7 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(gameObject);
 
-            winTextObject.gameObject.SetActive(true);
+            winTextObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
     }
