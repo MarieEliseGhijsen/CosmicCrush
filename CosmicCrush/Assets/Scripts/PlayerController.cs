@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
                     //Debug.Log("ENEMY bigger");
                     winTextObject.SetActive(true);
                     winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+                    Destroy(GameObject.FindGameObjectWithTag("Player"));
                 }
                 else
                 {
