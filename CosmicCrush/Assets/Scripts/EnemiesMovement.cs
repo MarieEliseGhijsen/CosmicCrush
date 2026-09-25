@@ -18,6 +18,9 @@ public class EnemiesMovement : MonoBehaviour
     public Material med;
     public Material big;
 
+    Transform sphere;
+    Vector3 radius;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,7 +30,12 @@ public class EnemiesMovement : MonoBehaviour
         dir.y = 0.0f;
         dir.z = Random.Range(-1.0f, 1.0f);
 
-        mass = Random.Range(0.1f, 2.0f);
+        mass = Random.Range(0.1f, 1.0f);
+        radius = new Vector3(mass, mass, mass);
+
+        sphere = GetComponent<Transform>();
+        sphere.transform.localScale = radius;
+
         //mass = 0.1f;
         speed = 1.0f;
 
@@ -35,17 +43,11 @@ public class EnemiesMovement : MonoBehaviour
         //med = Resources.Load("Assets\\Materials\\MediumEnemy.mat", typeof(Material)) as Material;
         //big = Resources.Load("Assets\\Materials\\LargeEnemy.mat", typeof(Material)) as Material;
 
-        Debug.Log(small);
-        Debug.Log(med);
-        Debug.Log(big);
-
         ColourSet();
     }
 
     private void ColourSet()
     {
-        Debug.Log("COLOURRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-
         Renderer skin = GetComponent<Renderer>();
         Material material = GetComponent<Renderer>().material;
 
@@ -67,10 +69,6 @@ public class EnemiesMovement : MonoBehaviour
             ColourSet();
             //skin.material.color = Color.blue;
         }
-
-        Debug.Log(small);
-        Debug.Log(med);
-        Debug.Log(big);
     }
 
     // Update is called once per frame
@@ -100,24 +98,26 @@ public class EnemiesMovement : MonoBehaviour
         //    winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         //}
 
-        Debug.Log("enterde collisosin");
-
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemiesMovement enemyScript = collision.gameObject.GetComponent<EnemiesMovement>();
-            Debug.Log("ENTERED COLLISON - TAG ENEMY");
 
 
             if (enemyScript != null)
             {
-                if (enemyScript.mass > mass)
+                if (enemyScript.mass < mass)
                 {
-                    Debug.Log("ENEMY bigger than Enemy");
-                }
-                else
-                {
-                    Debug.Log("ENEMY smaller than Enemy");
                     mass = mass + enemyScript.mass;
+
+                    Vector3 newR = radius + new Vector3(mass, mass, mass);
+                    radius = newR;
+                    sphere.transform.localScale = radius;
+
+                    if (newR.x > 3.0f && newR.y > 3.0f && newR.z > 3.0f)
+                    {
+                        sphere.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+                    }
+
                     Destroy(collision.gameObject);
                     ColourSet();
                 }
